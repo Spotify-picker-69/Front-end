@@ -28,7 +28,7 @@ column1 = dbc.Col(
         dcc.Markdown(homepage_text),
         dcc.Link(dbc.Button(
                             'Find your song matches now!',
-                            color='success', size='lg'), href='/picker')
+                            color='success', size='lg'), href='/song_match')
     ],
     md=4,
 )

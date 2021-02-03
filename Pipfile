@@ -12,6 +12,13 @@ joblib = "*"
 scikit-learn = "*"
 category-encoders = "*"
 xgboost = "*"
+pandas = "*"
+numpy = "==1.19.3"
+spotipy = "*"
+tensorflow = "*"
+sklearn = "*"
+python-dotenv = "*"
+matplotlib = "*"
 
 [dev-packages]
 
