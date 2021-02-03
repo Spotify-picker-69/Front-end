@@ -3,6 +3,7 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from scipy.spatial.distance import cdist
+import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.manifold import TSNE
 import plotly.express as px
@@ -13,7 +14,7 @@ import os
 from os import getenv
 import pandas as pd
 import pickle
-
+import itertools
 
 df = pd.read_csv('Pages\spotify_df.csv')
 
@@ -86,8 +87,7 @@ def flatten_dict_list(dict_list):
   
 
 def recommend_songs(song_list, df=df, n_songs=10):
-
-  song_cluster_pipeline = pickle.load(open("Pages\cluster.pickle", "rb"))
+  song_cluster_pipeline = pickle.load(open('Pages\cluster.pickle', 'rb'))
   metadata_cols = ['name', 'artists']
   song_dict = flatten_dict_list(song_list)
 
@@ -100,8 +100,33 @@ def recommend_songs(song_list, df=df, n_songs=10):
 
   rec_songs = df.iloc[index]
   rec_songs = rec_songs[~rec_songs['name'].isin(song_dict['name'])]
-  return rec_songs[metadata_cols].to_dict(orient='records')
+  ten_songs = rec_songs[metadata_cols].to_dict(orient='records')
+  return ten_songs, scaled_song_center, scaled_data
 
-def get_recomendations(input):
+def get_recommendations(input):
   input_dict = {'name': str(input)}
-  return recommend_songs([input_dict])
+  ten_songs, ssc, sd = recommend_songs([input_dict])
+  
+  return ten_songs
+
+def graph_against(input, n):
+  # input = whatever song is input, n= which song recommendation list to compare against
+    n = n-1
+    input_dict = {'name': str(input)}
+    ten_song, ssc, sd = recommend_songs([input_dict])
+
+    r = list(itertools.chain.from_iterable(ssc))
+
+    df = pd.DataFrame(dict(graph=number_cols, input=r, output=sd[n]))
+
+    ind = np.arange(len(df))
+    width = 0.4
+
+    fig, ax = plt.subplots()
+    ax.barh(ind, df.input, width, color='red', label=str(input))
+    ax.barh(ind + width, df.output, width, color='blue', label=ten_song[n]['name'])
+
+    ax.set(yticks=ind + width, yticklabels=df.graph, ylim=[2*width - 1, len(df)])
+    ax.legend()
+
+    return plt.show()

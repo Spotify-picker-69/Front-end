@@ -18,6 +18,7 @@ spotipy = "*"
 tensorflow = "*"
 sklearn = "*"
 python-dotenv = "*"
+matplotlib = "*"
 
 [dev-packages]
 

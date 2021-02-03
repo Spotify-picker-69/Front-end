@@ -4,8 +4,12 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import pandas as pd
-from Pages.model import get_recomendations
+from Pages.model import get_recommendations, graph_against
 from app import app
+import matplotlib
+# matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from plotly.tools import mpl_to_plotly
 
 
 
@@ -36,23 +40,39 @@ row = html.Div(
                 dbc.Col(
                     [
                         html.H2('Matched songs', className='mb-5'),
-                        html.Table([
-                            html.Tr(html.Td(id='song_1')),
-                            html.Tr(html.Td(id='song_2')),
-                            html.Tr(html.Td(id='song_3')),
-                            html.Tr(html.Td(id='song_4')),
-                            html.Tr(html.Td(id='song_5')),
-                            html.Tr(html.Td(id='song_6')),
-                            html.Tr(html.Td(id='song_7')),
-                            html.Tr(html.Td(id='song_8')),
-                            html.Tr(html.Td(id='song_9')),
-                            html.Tr(html.Td(id='song_10'))
-                        ])
-                        # html.Div(id="match-content", className="lead")
+                        html.Div(id="match-content", className="lead")
                     ]
                 )
             ]
-        )
+        ),
+        dbc.Row(
+            [
+                dbc.Col(html.Div(
+                    [
+                        dcc.Markdown('### Compare your song to a song in the list'),
+                        dcc.Input(
+                            id='song_number',
+                            placeholder='Song Number',
+                            type='number',
+                            value=''
+                            ),
+                        dbc.Button(
+                                'Graph!',
+                                id='graph_name',
+                                color='success',
+                                size='lg',
+                                className='mr-2'
+                            )
+                        ]
+                    )
+                )
+            ]
+        ),
+        dbc.Row(
+            html.Div(id='graph-content'
+                )
+                )
+        
     ]
 )
 
@@ -60,59 +80,35 @@ row = html.Div(
 
 # adding callback
 @app.callback(
-    Output('song_1', component_property='children'),
-    Output('song_2', component_property='children'),
-    Output('song_3', component_property='children'),
-    Output('song_4', component_property='children'),
-    Output('song_5', component_property='children'),
-    Output('song_6', component_property='children'),
-    Output('song_7', component_property='children'),
-    Output('song_8', component_property='children'),
-    Output('song_9', component_property='children'),
-    Output('song_10', component_property='children'),
+    Output('match-content', component_property='children'),
     Input('submit_song_name', 'n_clicks'),
     State('song_name', 'value')
 )
 def matches(value, n_clicks):
-    song_dict = get_recomendations(value)
-    song_list = []
-    for song in song_dict:
-        song = '{} by {}'.format(song['name'], song['artists'])
-        song_list.append(song)
-        
-    song1 = song_list[0]
-    song2 = song_list[1]
-    song3 = song_list[2]
-    song4 = song_list[3]
-    song5 = song_list[4]
-    song6 = song_list[5]
-    song7 = song_list[6]
-    song8 = song_list[7]
-    song9 = song_list[8]
-    song10 = song_list[9]
-    
-    return song1, song2, song3, song4, song5, song6, song7, song8, song9, song10
-'''def matches(value, n_clicks):
     if value is None:
         return 'Please type in a song'
     else:
-        song_dict = get_recomendations(value)
+        song_dict = get_recommendations(value)
         song_list = []
-        for song in song_dict:
-            song = '{} by {}'.format(song['name'], song['artists'])
-            song_list.append(song)
-        
-        song1 = song_list[0]
-        song2 = song_list[1]
-        song3 = song_list[2]
-        song4 = song_list[3]
-        song5 = song_list[4]
-        song6 = song_list[5]
-        song7 = song_list[6]
-        song8 = song_list[7]
-        song9 = song_list[8]
-        song10 = song_list[9]
-        
-        return song1, song2, song3, song4, song5, song6, song7, song8, song9, song10 '''
+        for i, song in enumerate(song_dict):
+            song_item = '{}: {} by {}\n'.format(i+1, song['name'], song['artists'])
+            song_list.append(song_item)
+        return song_list
+
+
+@app.callback(
+    Output('graph-content', component_property='children'),
+    Input('song_name', 'value'),
+    State('song_number', 'number')
+)
+def graph_output(number, value):
+    if value is None:
+        value = 1
+        plotly_figure = graph_against(number, int(float(value)))
+        return plotly_figure
+    else:
+        plotly_figure = graph_against(number, int(float(value)))
+        return plotly_figure
+
 
 layout = row
