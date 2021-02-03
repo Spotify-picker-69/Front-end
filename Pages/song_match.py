@@ -69,7 +69,7 @@ row = html.Div(
             ]
         ),
         dbc.Row(
-            html.Div(id='graph-content')
+            dcc.Graph(id='graph-content')
                 )
         
     ]
