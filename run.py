@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 
 # Imports from this application
 from app import app, server
-from Pages import picker, index
+from Pages import song_match, index
 
 
 # Navbar docs
@@ -17,8 +17,8 @@ navbar = dbc.NavbarSimple(
     brand_href='/',
     children=[
         dbc.NavItem(dcc.Link(
-            'Match Picker',
-            href='/picker',
+            'Song Match',
+            href='/song_match',
             className='nav-link')
             )
     ],
@@ -67,8 +67,8 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/':
         return index.layout
-    elif pathname == '/picker':
-        return picker.layout
+    elif pathname == '/song_match':
+        return song_match.layout
     else:
         return dcc.Markdown('## Page not found')
 
