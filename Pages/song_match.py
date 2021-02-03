@@ -53,7 +53,7 @@ row = html.Div(
                         dcc.Input(
                             id='song_number',
                             placeholder='Song Number',
-                            type='number',
+                            type='text',
                             value=''
                             ),
                         dbc.Button(
@@ -69,8 +69,7 @@ row = html.Div(
             ]
         ),
         dbc.Row(
-            html.Div(id='graph-content'
-                )
+            html.Div(id='graph-content')
                 )
         
     ]
@@ -98,16 +97,17 @@ def matches(value, n_clicks):
 
 @app.callback(
     Output('graph-content', component_property='children'),
+    Input('graph_name', 'n_clicks'),
     Input('song_name', 'value'),
     State('song_number', 'number')
 )
-def graph_output(number, value):
-    if value is None:
-        value = 1
-        plotly_figure = graph_against(number, int(float(value)))
+def graph_output(number, value, n_clicks):
+    if number is None:
+        number = 1
+        plotly_figure = graph_against(value, int(float(number)))
         return plotly_figure
     else:
-        plotly_figure = graph_against(number, int(float(value)))
+        plotly_figure = graph_against(value, int(float(number)))
         return plotly_figure
 
 
