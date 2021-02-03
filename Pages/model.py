@@ -20,8 +20,8 @@ df = pd.read_csv('Pages\spotify_df.csv')
 number_cols = ['acousticness', 'danceability', 'duration_ms', 'energy', 'explicit', 'instrumentalness', 'key', 'liveness', 'loudness', 'mode',
                'popularity', 'speechiness', 'tempo', 'valence']
 
-SPOTIPY_CLIENT_ID = "348904753e2c472cbd3c9bd30e1fd19e" # getenv('SPOTIPY_CLIENT_ID')
-SPOTIPY_SECRET_ID = "6d3880a66e2842c8a5f1ab890e255aee" # getenv('SECRET_ID')
+SPOTIPY_CLIENT_ID = getenv('SPOTIPY_CLIENT_ID')
+SPOTIPY_SECRET_ID = getenv('SECRET_ID')
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID,
                                                            client_secret=SPOTIPY_SECRET_ID))
