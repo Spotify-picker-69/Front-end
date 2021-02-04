@@ -128,5 +128,6 @@ def graph_against(input, n):
 
     ax.set(yticks=ind + width, yticklabels=df.graph, ylim=[2*width - 1, len(df)])
     ax.legend()
+    plt.ioff
 
     return plt.show()
