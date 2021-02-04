@@ -17,7 +17,7 @@ import pickle
 import itertools
 import plotly.graph_objects as go
 
-df = pd.read_csv('Pages\spotify_df.csv')
+df = pd.read_csv('spotify_df.csv')
 
 number_cols = ['acousticness', 'danceability', 'duration_ms', 'energy', 'explicit', 'instrumentalness', 'key', 'liveness', 'loudness', 'mode',
                'popularity', 'speechiness', 'tempo', 'valence']
@@ -88,7 +88,7 @@ def flatten_dict_list(dict_list):
   
 
 def recommend_songs(song_list, df=df, n_songs=10):
-  song_cluster_pipeline = pickle.load(open('Pages\cluster.pickle', 'rb'))
+  song_cluster_pipeline = pickle.load(open('cluster.pickle', 'rb'))
   metadata_cols = ['name', 'artists']
   song_dict = flatten_dict_list(song_list)
 
