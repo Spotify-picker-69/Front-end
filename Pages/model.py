@@ -15,6 +15,7 @@ from os import getenv
 import pandas as pd
 import pickle
 import itertools
+import plotly.graph_objects as go
 
 df = pd.read_csv('Pages\spotify_df.csv')
 
@@ -107,7 +108,7 @@ def get_recommendations(input):
   input_dict = {'name': str(input)}
   ten_songs, ssc, sd = recommend_songs([input_dict])
   
-  return ten_songs
+  return  ten_songs
 
 def graph_against(input, n):
   # input = whatever song is input, n= which song recommendation list to compare against
@@ -128,6 +129,26 @@ def graph_against(input, n):
 
     ax.set(yticks=ind + width, yticklabels=df.graph, ylim=[2*width - 1, len(df)])
     ax.legend()
-    plt.ioff
 
     return plt.show()
+
+def plot_plotly(input, n):
+    input_dict = {'name': str(input)}
+    ten_song, ssc, sd = recommend_songs([input_dict])
+    n = n-1
+
+    r = list(itertools.chain.from_iterable(ssc))
+
+    df = pd.DataFrame(dict(graph=number_cols, input=r, output=sd[n]))
+
+
+    fig = go.Figure(
+        data=[
+            go.Bar(name=str(input), x=df.input, y=df.graph, orientation='h'),
+            go.Bar(name=ten_song[n]['name'], x=df.output, y=df.graph, orientation='h')
+        ],
+        layout = { 'yaxis': {'title':'spotify metrics'}}
+    )
+    fig.update_layout(barmode='group')
+
+    return fig    

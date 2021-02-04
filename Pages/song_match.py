@@ -4,11 +4,12 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-from Pages.model import get_recommendations, graph_against
+from Pages.model import get_recommendations, graph_against, plot_plotly
 from app import app
 import matplotlib as plt
 from plotly.tools import mpl_to_plotly
 import pandas as pd
+
 
 layout = html.Div(
     [
@@ -48,7 +49,7 @@ layout = html.Div(
                     )
                 ),
                 dbc.Col(
-                    html.Div(id='graph-content', children='component')
+                    html.Div(id='graph-content')
                 )
             ]
         )    
@@ -80,10 +81,11 @@ def matches(n_clicks, value):
     State('song_number', 'value')
 )
 def graph_output(n_clicks, value, number):
-    if n_clicks is None:
-        return PreventUpdate
+    if n_clicks == 0:
+        raise PreventUpdate
     else:
-        # plotly_figure = mpl_to_plotly(graph_against(value, int(float(number))))
-        # graph = plotly_figure.show()
-        graph = graph_against(value, int(float(number)))
-        return dcc.Graph(fig=graph)
+        if number is None:
+            raise PreventUpdate
+        else:
+            fig = plot_plotly(value, int(float(number)))
+            return dcc.Graph(figure=fig)
