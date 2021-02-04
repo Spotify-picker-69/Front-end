@@ -19,6 +19,7 @@ tensorflow = "*"
 sklearn = "*"
 python-dotenv = "*"
 matplotlib = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 

@@ -9,6 +9,8 @@ from app import app
 import matplotlib as plt
 from plotly.tools import mpl_to_plotly
 import pandas as pd
+import sqlalchemy as db
+
 
 
 layout = html.Div(
@@ -24,12 +26,20 @@ layout = html.Div(
                                 id='song_name',
                                 type='text',
                             ),
-                            html.Button(id='submit_button_state', children='Match!'),
+                            dbc.Button('Match!', id='submit_button_state', size='lg', color='success')
+                            # html.Button(id='submit_button_state', children='Match!')
+                            
+                        ]
+                    )
+                 ),
+                dbc.Col(
+                    html.Div(
+                        [
                             dcc.Markdown('## Matched Songs'),
                             html.Div(id='match-content', className='lead')
                         ]
                     )
-                 )
+                )
             ]
         ),
         dbc.Row(
@@ -44,7 +54,8 @@ layout = html.Div(
                                 placeholder='Song Number',
                                 type='text'
                             ),
-                            html.Button(id='submit_button_graph', children='Graph!')
+                            dbc.Button('Graph!', id='submit_button_graph', size='lg', color='success')
+                            # html.Button(id='submit_button_graph', children='Graph!')
                         ]
                     )
                 ),
@@ -67,11 +78,35 @@ def matches(n_clicks, value):
     if n_clicks is None:
         raise PreventUpdate 
     else:
+        engine = db.create_engine('sqlite:///Song_Match_db.sqlite3')
         song_dict = get_recommendations(value)
+        conn = engine.connect()
+        metadata = db.MetaData(conn)
+        Song_matches = db.Table('Song_matches', metadata,
+                            db.Column('Id', db.Integer, primary_key=True),
+                            db.Column('Song', db.String(500), nullable=False),
+                            db.Column('Artists', db.String(500), nullable=False),
+                            sqlite_autoincrement=True
+                        )
+        Fav_song = db.Table("Fav_song", metadata,
+                            db.Column('Id', db.Integer, primary_key=True),
+                            db.Column('Matching_Song_Name', db.String(500), nullable=False),
+                            sqlite_autoincrement=True                    
+                    )
+        metadata.create_all(engine)
+        conn.begin()
+        query = db.insert(Fav_song).values(Matching_Song_Name=value)
         song_list = []
         for i, song in enumerate(song_dict):
+            fav_song=value
             song_item = '{}: {} by {}\n'.format(i+1, song['name'], song['artists'])
             song_list.append(song_item)
+            query = db.insert(Song_matches).values(
+                                            Song='{}'.format(song['name']),
+                                            Artists='{}'.format(song['artists'])
+                                        )
+            conn.execute(query)
+        conn.close()
         return song_list
 
 @app.callback(

@@ -39,12 +39,12 @@ footer = dbc.Container(
                     # href='mailto:johncarlopez.88@gmail.com'),
                     html.A(html.I(
                         className='fab fa-github-square mr-1'),
-                        href='https://github.com/Lopez-John/Spotify-picker-69'),
+                        href='https://github.com/Spotify-picker-69/Front-end'),
                     # html.A(html.I(className='fab fa-linkedin mr-1'),
                     # href='https://www.linkedin.com/in/<you>/'),
-                    html.A(html.I(
-                        className='fab fa-twitter-square mr-1'),
-                        href='https://twitter.com/ds_lad'),
+                    #html.A(html.I(
+                        #className='fab fa-twitter-square mr-1'),
+                        #href='https://twitter.com/ds_lad'),
                 ],
                 className='lead'
             )
