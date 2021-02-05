@@ -13,9 +13,11 @@ homepage_text = """
 
                 ## What's your next favorite song?
 
-                Spotify Picker will be able to choose at least 10 songs that matches your favorite song.
+                Spotify Picker will be able to choose 10 songs that match your favorite song.
 
-                Perfect for building playlists for your high school crush, or identifying songs to remix together.
+                Perfect for building playlists for your high school crush,
+
+                or identifying songs to remix together.
 
                 Possiblities are endless for the Spotify Picker.
 

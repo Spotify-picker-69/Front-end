@@ -42,9 +42,9 @@ footer = dbc.Container(
                         href='https://github.com/Spotify-picker-69/Front-end'),
                     # html.A(html.I(className='fab fa-linkedin mr-1'),
                     # href='https://www.linkedin.com/in/<you>/'),
-                    #html.A(html.I(
-                        #className='fab fa-twitter-square mr-1'),
-                        #href='https://twitter.com/ds_lad'),
+                    # html.A(html.I(
+                    # className='fab fa-twitter-square mr-1'),
+                    # href='https://twitter.com/ds_lad'),
                 ],
                 className='lead'
             )
